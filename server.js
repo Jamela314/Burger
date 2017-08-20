@@ -4,33 +4,25 @@ var methodOverride = require('method-override')
 var bodyParser = require('body-parser')
 var app = express();
 
+var port = 3000;
 
 
 
+pp.use(express.static(process.cwd() + '/public'));
 
+app.use(bodyParser.urlencoded({
+	extended: false
+}))
+// override with POST having ?_method=DELETE
+app.use(methodOverride('_method'))
+var exphbs = require('express-handlebars');
+app.engine('handlebars', exphbs({
+    defaultLayout: 'main',
+}));
+app.set('view engine', 'handlebars');
 
+var routes = require('./controllers/burgers_controller.js');
+app.use('/', routes);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// parse an HTML body into a string 
-// app.use(bodyParser.text({ type: 'text/html' }))
-
-// app.get('/', function (req, res) {
-//   res.send('Hello World')
-// })
-
-// app.listen(3000)
+var port = process.env.PORT || 3000;
+app.listen(port);
